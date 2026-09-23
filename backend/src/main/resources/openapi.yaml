@@ -1,0 +1,189 @@
+openapi: 3.0.3
+
+info:
+  title: UberDup API
+  version: 1.0.0
+
+tags:
+  - name: User
+    description: Operations related to user management
+  - name: Driver
+    description: Operations related to driver management
+
+paths:
+  /users:
+    post:
+      tags:
+        - User
+      operationId: createUser
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+      responses:
+        '201':
+          description: User Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+        '400':
+          description: Bad Request
+  /users/{userId}:
+    get:
+      tags:
+        - User
+      operationId: getUserInfo
+      summary: Get user information by user ID
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+            description: User Info
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/UserInfo'
+        '404':
+            description: User Not Found
+  /user/deleteUser/{userId}:
+    delete:
+      tags:
+        - User
+      operationId: deleteUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: User Deleted
+        '404':
+          description: User Not Found
+
+  /drivers/me:
+    post:
+      tags:
+        - Driver
+      operationId: createDriverProfile
+      summary: Create a new driver profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DriverProfile'
+
+
+components:
+  schemas:
+    DriverProfile:
+        type: object
+        required:
+            - id
+            - userId
+            - driverStatus
+            - licenseNumber
+            - vehicleId
+            - approvedAt
+        properties:
+            id:
+              type: string
+            userId:
+                type: string
+            driverStatus:
+                type: string
+            licenseNumber:
+              type: string
+            vehicleModel:
+              type: string
+            vehiclePlate:
+              type: string
+            approvedAt:
+                type: string
+                format: date-time
+
+    DriverStatus:
+        type: string
+        enum:
+            - PENDING
+            - APPROVED
+            - REJECTED
+            - SUSPENDED
+
+    Sex:
+      type: string
+      enum:
+        - M
+        - F
+        - OTHER
+
+    UserCreateRequest:
+      type: object
+      required:
+        - email
+        - name
+        - password
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+          format: password
+          minLength: 8
+          writeOnly: true
+        sex:
+          $ref: '#/components/schemas/Sex'
+
+    UserInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        sex:
+          $ref: '#/components/schemas/Sex'
+        createdAt:
+          type: string
+          format: date-time
+
+    Habitation:
+      type: object
+      required:
+        - street
+        - number
+        - city
+        - state
+        - country
+        - zipCode
+      properties:
+        street:
+          type: string
+        number:
+          type: string
+        apartment:
+          type: string
+        reference:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        zipCode:
+          type: string
