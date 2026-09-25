@@ -7,11 +7,11 @@ info:
 tags:
   - name: User
     description: Operations related to user management
-  - name: Driver
-    description: Operations related to driver management
+  - name: WalkBud
+    description: Operations related to walking bud
 
 paths:
-  /users:
+  /user:
     post:
       tags:
         - User
@@ -29,14 +29,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserInfo'
+                $ref: '#/components/schemas/UserCreatedResponse'
         '400':
           description: Bad Request
-  /users/{userId}:
+  /user/{userId}:
     get:
       tags:
         - User
-      operationId: getUserInfo
+      operationId: getUserData
       summary: Get user information by user ID
       parameters:
         - name: userId
@@ -50,7 +50,7 @@ paths:
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/UserInfo'
+                  $ref: '#/components/schemas/UserData'
         '404':
             description: User Not Found
   /user/deleteUser/{userId}:
@@ -70,55 +70,53 @@ paths:
         '404':
           description: User Not Found
 
-  /drivers/me:
+  /walkingBud/{userId}:
     post:
       tags:
-        - Driver
-      operationId: createDriverProfile
-      summary: Create a new driver profile
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DriverProfile'
+        - WalkBud
+      operationId: createWalkingBud
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Walking Bud Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalkingBudCreatedResponse'
+        '404':
+          description: User Not Found to create
 
+  /walkingBud/{walkerId}:
+    post:
+      tags:
+        - WalkBud
+      operationId: deleteWalkingBud
+      parameters:
+        - name: walkerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Walker deleted successfully
+        '400':
+          description: Walker not found
 
 components:
   schemas:
-    DriverProfile:
-        type: object
-        required:
-            - id
-            - userId
-            - driverStatus
-            - licenseNumber
-            - vehicleId
-            - approvedAt
-        properties:
-            id:
-              type: string
-            userId:
-                type: string
-            driverStatus:
-                type: string
-            licenseNumber:
-              type: string
-            vehicleModel:
-              type: string
-            vehiclePlate:
-              type: string
-            approvedAt:
-                type: string
-                format: date-time
-
-    DriverStatus:
-        type: string
-        enum:
-            - PENDING
-            - APPROVED
-            - REJECTED
-            - SUSPENDED
+    WalkingBudCreatedResponse:
+      type: object
+      properties:
+        walkerId:
+          type: string
+        name:
+          type: string
 
     Sex:
       type: string
@@ -133,6 +131,9 @@ components:
         - email
         - name
         - password
+        - residence
+        - sex
+        - age
       properties:
         email:
           type: string
@@ -143,23 +144,38 @@ components:
           format: password
           minLength: 8
           writeOnly: true
+        residence:
+          $ref: '#/components/schemas/Habitation'
         sex:
           $ref: '#/components/schemas/Sex'
+        age:
+          type: integer
+          format: int32
+          minimum: 0
 
-    UserInfo:
+    UserCreatedResponse:
       type: object
       properties:
         id:
           type: string
         email:
           type: string
+
+    UserData:
+      type: object
+      properties:
+        email:
+          type: string
         name:
           type: string
+        residence:
+          $ref: '#/components/schemas/Habitation'
         sex:
           $ref: '#/components/schemas/Sex'
-        createdAt:
-          type: string
-          format: date-time
+        age:
+          type: integer
+          format: int32
+          minimum: 0
 
     Habitation:
       type: object

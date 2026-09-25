@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>uberDup</artifactId>
+	<artifactId>walkingBud</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name/>
 	<description/>
@@ -199,13 +199,13 @@
 
 						<configuration>
 							<inputSpec>
-								${project.basedir}/src/main/resources/openapi.yaml
+								${project.basedir}/src/main/resources/openapi.yml
 							</inputSpec>
 
 							<generatorName>spring</generatorName>
 
-							<apiPackage>uberDup.api</apiPackage>
-							<modelPackage>uberDup.entity.dto</modelPackage>
+							<apiPackage>walkingBud.api</apiPackage>
+							<modelPackage>walkingBud.entity.dto</modelPackage>
 
 							<configOptions>
 								<interfaceOnly>true</interfaceOnly>
@@ -215,8 +215,10 @@
 								<useResponseEntity>true</useResponseEntity>
 								<requestMappingMode>api_interface</requestMappingMode>
 								<sourceFolder>src/main/java</sourceFolder>
+								<useTags>true</useTags>
 							</configOptions>
 
+							<cleanupOutput>true</cleanupOutput>
 							<generateSupportingFiles>false</generateSupportingFiles>
 						</configuration>
 					</execution>

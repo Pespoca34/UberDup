@@ -1,13 +1,15 @@
-package uberDup.entity;
+package walkingBud.entity;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
-import uberDup.entity.dto.Habitation;
+import walkingBud.entity.dto.Habitation;
+import walkingBud.entity.dto.Sex;
 
 import java.util.Date;
 
@@ -15,6 +17,8 @@ import java.util.Date;
 @Table(name = "user_info")
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class UserEntity {
 
     @Column(unique = true)
@@ -34,11 +38,17 @@ public class UserEntity {
     @NotBlank
     private String name;
 
+    @Column(nullable = false)
+    @NotBlank
     private Habitation address;
 
-    @Column(nullable = true)
-    @Nullable
-    private Character sex;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Sex sex;
+
+    @Column(nullable = false)
+    @NotBlank
+    private Integer age;
 
     @Column(nullable = true)
     @Nullable
